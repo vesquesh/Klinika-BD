@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25" zv="Cache for Windows (x86-64) 2016.2.1 (Build 803U_SU)" ts="2019-05-28 10:20:31">
+<Class name="KlinikaDB.Lekarz">
+<Super>%Persistent,%Populate,%XML.Adaptor,%ZEN.DataModel.Adaptor,KlinikaDB.Pracownik</Super>
+<TimeChanged>65158,69856.959968</TimeChanged>
+<TimeCreated>65158,48162.939143</TimeCreated>
+
+<Property name="TytulNaukowy">
+<Type>%String</Type>
+</Property>
+
+<Property name="Specjalizacja">
+<Type>%String</Type>
+</Property>
+
+<Method name="pobierzImieNazwisko">
+<ReturnType>%String</ReturnType>
+<Implementation><![CDATA[
+	Set pelnaNazwa = ..TytulNaukowy_" "_..Imie_" "_..Nazwisko
+	Return pelnaNazwa
+]]></Implementation>
+</Method>
+
+<Method name="pobierzSpecjalizacje">
+<ReturnType>%String</ReturnType>
+<Implementation><![CDATA[
+	set specjalnosc = ..Pozycja.Tytul
+	Return specjalnosc
+]]></Implementation>
+</Method>
+
+<Storage name="Default">
+<Type>%Library.CacheStorage</Type>
+<DataLocation>^KlinikaDB.LekarzD</DataLocation>
+<DefaultData>LekarzDefaultData</DefaultData>
+<IdLocation>^KlinikaDB.LekarzD</IdLocation>
+<IndexLocation>^KlinikaDB.LekarzI</IndexLocation>
+<StreamLocation>^KlinikaDB.LekarzS</StreamLocation>
+<Data name="LekarzDefaultData">
+<Value name="1">
+<Value>%%CLASSNAME</Value>
+</Value>
+<Value name="2">
+<Value>Imie</Value>
+</Value>
+<Value name="3">
+<Value>Nazwisko</Value>
+</Value>
+<Value name="4">
+<Value>Pozycja</Value>
+</Value>
+<Value name="5">
+<Value>Specjalizacja</Value>
+</Value>
+<Value name="6">
+<Value>TytulNaukowy</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+
+
+<Class name="KlinikaDB.Oddzial">
+<Super>%SerialObject,%XML.Adaptor,%ZEN.DataModel.Adaptor</Super>
+<TimeChanged>65158,64114.398812</TimeChanged>
+<TimeCreated>65158,48179.802583</TimeCreated>
+
+<Property name="Specjalnosc">
+<Type>%String</Type>
+</Property>
+
+<Property name="NumerOddzialu">
+<Type>%Integer</Type>
+<Parameter name="MINVAL" value="1"/>
+</Property>
+
+<Index name="NumerOddzialuIndex">
+<Properties>NumerOddzialu</Properties>
+<Unique>1</Unique>
+</Index>
+
+<Storage name="Default">
+<Type>%Library.CacheSerialState</Type>
+<DataLocation>^KlinikaDB.OddzialD</DataLocation>
+<DefaultData>OddzialDefaultData</DefaultData>
+<IdLocation>^KlinikaDB.OddzialD</IdLocation>
+<IndexLocation>^KlinikaDB.OddzialI</IndexLocation>
+<State>OddzialState</State>
+<StreamLocation>^KlinikaDB.OddzialS</StreamLocation>
+<Data name="OddzialDefaultData">
+<Value name="1">
+<Value>%%CLASSNAME</Value>
+</Value>
+<Value name="2">
+<Value>Specjalnosc</Value>
+</Value>
+<Value name="3">
+<Value>NumerOddzialu</Value>
+</Value>
+</Data>
+<Data name="OddzialState">
+<Structure>listnode</Structure>
+<Subscript/>
+<Value name="1">
+<Value>Specjalnosc</Value>
+</Value>
+<Value name="2">
+<Value>NumerOddzialu</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+
+
+<Class name="KlinikaDB.Osoba">
+<Abstract>1</Abstract>
+<TimeChanged>65158,61676.20005</TimeChanged>
+<TimeCreated>65158,48107.930759</TimeCreated>
+
+<Property name="Imie">
+<Type>%String</Type>
+<Required>1</Required>
+</Property>
+
+<Property name="Nazwisko">
+<Type>%String</Type>
+<Required>1</Required>
+</Property>
+
+<Method name="pobierzImieNazwisko">
+<ReturnType>%String</ReturnType>
+<Implementation><![CDATA[
+	Set returnImieNazwisko = ..Imie_" "_..Nazwisko
+	Return returnImieNazwisko
+]]></Implementation>
+</Method>
+</Class>
+
+
+
+
+<Class name="KlinikaDB.Pacjent">
+<Super>%Persistent,%Populate,%XML.Adaptor,%ZEN.DataModel.Adaptor,KlinikaDB.Osoba</Super>
+<TimeChanged>65158,70688.57388</TimeChanged>
+<TimeCreated>65158,48128.191363</TimeCreated>
+
+<Property name="PESEL">
+<Type>%String</Type>
+<Parameter name="MAXLEN" value="11"/>
+<Parameter name="MINLEN" value="11"/>
+</Property>
+
+<Index name="PESELIndex">
+<Properties>PESEL</Properties>
+<Unique>1</Unique>
+</Index>
+
+<Property name="Schorzenie">
+<Type>%String</Type>
+</Property>
+
+<Property name="TerminZwolnienia">
+<Type>%Library.TimeStamp</Type>
+</Property>
+
+<Property name="Sala">
+<Type>KlinikaDB.Sala</Type>
+<Cardinality>one</Cardinality>
+<Inverse>Pacjenci</Inverse>
+<Relationship>1</Relationship>
+</Property>
+
+<Method name="pobierzPESEL">
+<ReturnType>%String</ReturnType>
+<Implementation><![CDATA[			Return ..PESEL
+]]></Implementation>
+</Method>
+
+<Method name="pobierzSchorzenie">
+<ReturnType>%String</ReturnType>
+<Implementation><![CDATA[		Return ..Schorzenie
+]]></Implementation>
+</Method>
+
+<Method name="pobierzTerminZwolnienia">
+<ReturnType>%Date</ReturnType>
+<Implementation><![CDATA[		Return ..TerminZwolnienia
+]]></Implementation>
+</Method>
+
+<Storage name="Default">
+<Type>%Library.CacheStorage</Type>
+<DataLocation>^KlinikaDB.PacjentD</DataLocation>
+<DefaultData>PacjentDefaultData</DefaultData>
+<IdLocation>^KlinikaDB.PacjentD</IdLocation>
+<IndexLocation>^KlinikaDB.PacjentI</IndexLocation>
+<StreamLocation>^KlinikaDB.PacjentS</StreamLocation>
+<Data name="PacjentDefaultData">
+<Value name="1">
+<Value>%%CLASSNAME</Value>
+</Value>
+<Value name="2">
+<Value>Imie</Value>
+</Value>
+<Value name="3">
+<Value>Nazwisko</Value>
+</Value>
+<Value name="4">
+<Value>TerminZwolnienia</Value>
+</Value>
+<Value name="5">
+<Value>PESEL</Value>
+</Value>
+<Value name="6">
+<Value>Schorzenie</Value>
+</Value>
+<Value name="7">
+<Value>PrzypisanaSala</Value>
+</Value>
+<Value name="8">
+<Value>Sala</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+
+
+<Class name="KlinikaDB.Pielegniarka">
+<Super>%Persistent,%Populate,%XML.Adaptor,%ZEN.DataModel.Adaptor,KlinikaDB.Pracownik</Super>
+<TimeChanged>65158,53044.715989</TimeChanged>
+<TimeCreated>65158,48198.713895</TimeCreated>
+
+<Property name="ObslugiwaneSale">
+<Type>KlinikaDB.Sala</Type>
+<Cardinality>many</Cardinality>
+<Inverse>Pielegniarka</Inverse>
+<Relationship>1</Relationship>
+</Property>
+
+<Storage name="Default">
+<Type>%Library.CacheStorage</Type>
+<DataLocation>^KlinikaDB.PielegniarkaD</DataLocation>
+<DefaultData>PielegniarkaDefaultData</DefaultData>
+<IdLocation>^KlinikaDB.PielegniarkaD</IdLocation>
+<IndexLocation>^KlinikaDB.PielegniarkaI</IndexLocation>
+<StreamLocation>^KlinikaDB.PielegniarkaS</StreamLocation>
+<Data name="PielegniarkaDefaultData">
+<Value name="1">
+<Value>%%CLASSNAME</Value>
+</Value>
+<Value name="2">
+<Value>Imie</Value>
+</Value>
+<Value name="3">
+<Value>Nazwisko</Value>
+</Value>
+<Value name="4">
+<Value>Pozycja</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+
+
+<Class name="KlinikaDB.Pracownik">
+<Super>KlinikaDB.Osoba</Super>
+<TimeChanged>65158,59512.424066</TimeChanged>
+<TimeCreated>65158,48147.413945</TimeCreated>
+
+<Property name="Pozycja">
+<Type>Stanowisko</Type>
+<Required>1</Required>
+</Property>
+
+<Method name="pobierzPensje">
+<ReturnType>%Integer</ReturnType>
+<Implementation><![CDATA[
+		Set pensja = ..Pozycja.PensjaPodstawowa
+		Return pensja
+]]></Implementation>
+</Method>
+</Class>
+
+
+<Class name="KlinikaDB.Sala">
+<Super>%Persistent,%Populate,%XML.Adaptor,%ZEN.DataModel.Adaptor</Super>
+<TimeChanged>65158,62833.302508</TimeChanged>
+<TimeCreated>65158,48223.286023</TimeCreated>
+
+<Property name="NrSali">
+<Type>%Integer</Type>
+<Parameter name="MINVAL" value="1"/>
+</Property>
+
+<Index name="NrSaliIndex">
+<Properties>NrSali</Properties>
+<Unique>1</Unique>
+</Index>
+
+<Property name="LiczbaMiejsc">
+<Type>%Integer</Type>
+<Parameter name="MAXVAL" value="4"/>
+<Parameter name="MINVAL" value="0"/>
+</Property>
+
+<Property name="OddzialSzpitalny">
+<Type>Oddzial</Type>
+<Required>1</Required>
+</Property>
+
+<Property name="Pielegniarka">
+<Type>KlinikaDB.Pielegniarka</Type>
+<Cardinality>one</Cardinality>
+<Inverse>ObslugiwaneSale</Inverse>
+<Relationship>1</Relationship>
+</Property>
+
+<Property name="Pacjenci">
+<Type>KlinikaDB.Pacjent</Type>
+<Cardinality>many</Cardinality>
+<Inverse>Sala</Inverse>
+<Relationship>1</Relationship>
+</Property>
+
+<Storage name="Default">
+<Type>%Library.CacheStorage</Type>
+<DataLocation>^KlinikaDB.SalaD</DataLocation>
+<DefaultData>SalaDefaultData</DefaultData>
+<IdLocation>^KlinikaDB.SalaD</IdLocation>
+<IndexLocation>^KlinikaDB.SalaI</IndexLocation>
+<StreamLocation>^KlinikaDB.SalaS</StreamLocation>
+<Data name="SalaDefaultData">
+<Value name="1">
+<Value>%%CLASSNAME</Value>
+</Value>
+<Value name="2">
+<Value>LiczbaMiejsc</Value>
+</Value>
+<Value name="3">
+<Value>OddzialSzpitalny</Value>
+</Value>
+<Value name="4">
+<Value>NrSali</Value>
+</Value>
+<Value name="5">
+<Value>Pielegniarka</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+
+
+<Class name="KlinikaDB.Stanowisko">
+<Super>%SerialObject,%XML.Adaptor,%ZEN.DataModel.Adaptor</Super>
+<TimeChanged>65158,60371.706146</TimeChanged>
+<TimeCreated>65158,48062.710556</TimeCreated>
+
+<Property name="Tytul">
+<Type>%String</Type>
+<Required>1</Required>
+</Property>
+
+<Property name="PensjaPodstawowa">
+<Type>%Integer</Type>
+<Required>1</Required>
+<Parameter name="MAXVAL" value="10000"/>
+<Parameter name="MINVAL" value="2000"/>
+</Property>
+
+<Storage name="Default">
+<Type>%Library.CacheSerialState</Type>
+<State>StanowiskoState</State>
+<StreamLocation>^KlinikaDB.StanowiskoS</StreamLocation>
+<Data name="StanowiskoState">
+<Value name="1">
+<Value>Tytul</Value>
+</Value>
+<Value name="2">
+<Value>PensjaPodstawowa</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+
+
+<Project name="Klinika_OBD" LastModified="2019-05-25 14:34:23.249435">
+  <Items>
+    <ProjectItem name="KlinikaDB" type="PKG"></ProjectItem>
+  </Items>
+</Project>
+</Export>
